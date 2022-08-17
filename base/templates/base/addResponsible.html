@@ -1,0 +1,37 @@
+<style>
+    *{
+     font-size:32px;
+
+    }
+  input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+input[type=submit] {
+  width: 100%;
+  background-color: #9772FB;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+</style>
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    <h1>If you are going assign user to an existing department Enter department name as : 'Department name'(user) for example: ABC(xyz)</h1>
+    <form class="center" action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input class="button" type="submit" value="Submit">
+        <a class="geri" href="{{request.META.HTTP_REFERER}}">Go back</a>
+    </form>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,112 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+    *{
+        font-size: 18px;
+        font-family: 'Montserrat', sans-serif;
+        text-decoration:none;
+    }
+   textarea{
+    width:100%;
+    resize:none;
+    height:200px;
+}
+.header{
+    position:relative;
+    display:grid;
+    grid-template-columns:auto auto;
+    background:#00FFAB;
+    height:50px;
+
+    }
+    .header .btn{
+        width:150px;
+        position:absolute;
+        height:50px;
+         top: 0px;
+        right: 0px;
+    }
+    .header .cikis{
+        width:auto;
+        position: absolute;
+        bottom:5px;
+        left: 22px;
+        border-bottom:2px solid black;
+    }
+    input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 100%;
+  background-color: #764AF1;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #9766FF;
+}
+form{
+display:grid;
+grid-template-columns:auto auto auto;
+gap:15px;
+}
+div {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+form a{
+    display:grid;
+    align-items:Center;
+    color:black;
+    width:100px;
+}
+form a:hover{
+color:#9766FF;
+}
+@media only screen and (max-width:650px){
+    form{
+    display:grid;
+    grid-template-columns:auto auto;
+    }
+}
+</style>
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="header">
+    {% if request.user.is_authenticated %}
+    {% if request.user.is_superuser %}
+    <h2>Welcome <a style="border-bottom:1px solid black;" href="{% url 'superuser' %}">{{request.user.first_name}}</a></h2>
+    <a class="cikis" href="{% url 'logout' %}">Logout</a>
+    {% else %}
+    <h2>Welcome {{request.user.first_name}}</h2>
+    <a class="cikis" href="{% url 'logout' %}">Logout</a>
+    {% endif %}
+    {% endif %}
+</div>
+<div>
+    <form  action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input class="button" type="submit" value="Submit">
+        <a  href="{{request.META.HTTP_REFERER}}">Go Back</a>
+    </form>
+</div>
+<script>
+    let none = document.getElementById("id_date");
+    if (none != " "){
+        alert("Completion date can not be selected on creating project");
+    }
+</script>
+{% endblock content %}

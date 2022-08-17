@@ -1,0 +1,103 @@
+{%  include 'main.html' %}
+{% block content %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500&display=swap');
+    *{
+        margin:0;
+        padding:0;
+        font-size:18px;
+        font-family:'Saira Condensed', sans-serif;
+        text-decoration:none;
+    }
+    .header{
+        background:#59CE8F;
+    }
+    .header a{
+        color:#242F9B;
+    }
+    .header a:hover{
+       color:#F15412;
+    }
+    .status{
+        margin-top:20px;
+        text-align:center;
+        display:grid;
+        grid-template-columns:auto auto  auto ;
+        gap:15px;
+    }
+    project-no{
+    background:red;
+    width:100px;
+    height:75px;
+    }
+    .project h2{
+        background:#242F9B;
+        color: #F2F2F2;
+    }
+    .project p{
+        background:#d2d2d2;
+    }
+</style>
+<div class="header">
+    <h2>Welcome,{{request.user.first_name}}</h2>
+    <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
+</div>
+<div class="status">
+    <div class="project">
+        <h2>Project No</h2>
+        <p>Digi-{{obj.id}}</p>
+    </div>
+    <div class="project">
+        <h2>Index</h2>
+        <p>{{obj.index}}</p>
+    </div>
+    <div class="project">
+        <h2>Operation</h2>
+        <p>{{obj.operation}}</p>
+    </div>
+    <div class="project">
+        <h2>Function</h2>
+        <p>{{obj.function}}</p>
+    </div>
+    <div class="project">
+        <h2>Customer</h2>
+        <p>{{obj.customer}}</p>
+    </div>
+    <div class="project">
+        <h2>Details</h2>
+        <p>{{obj.details}}</p>
+    </div>
+    <div class="project">
+        <h2>Digital Maturity</h2>
+        <p>{{obj.digital}}</p>
+    </div>
+    <div class="project">
+        <h2>CS or SmartMNF</h2>
+        <p>{{obj.CS_or_SmartMNF}}</p>
+    </div>
+    <div class="project">
+        <h2>Department</h2>
+        <p>{{obj.dept}}</p>
+    </div>
+    <div class="project">
+        <h2>Responsible</h2>
+        <p>{{obj.dept.resp.first_name}}</p>
+    </div>
+    <div class="project">
+        <h2>Connectivity</h2>
+        <p>{{obj.conn}}</p>
+    </div>
+    <div class="project">
+        <h2>Latest Status(es)</h2>
+    {% for status in old %}
+        {% if old|length > 0 %}
+        <p>Status {{ forloop.counter }} : {{status.old_status}} Updated: {{status.time|date }}</p>
+        {% else %}
+        <p>No changes yet.</p>
+        {% endif %}
+    {% endfor %}
+    </div>
+
+</div>
+
+{% endblock content %}

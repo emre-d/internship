@@ -1,0 +1,363 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+<style>
+    *{
+       margin:0;
+       padding:0;
+    }
+    body{
+        width:100%;
+        height:100%;
+    }
+    .wrapper{
+        display:grid;
+        grid-template-columns:auto auto ;
+        width:100%;
+        height:100;
+    }
+    .index-chart{
+        width:700px;
+        height:500px;
+    }
+    .form{
+        display:flex;
+    }
+    table{
+    border-collapse: collapse;
+    width:85%;
+    font-size:24px;
+    text-align:center;
+    }
+    table th {
+        background:#3B44F6;
+        color:white;
+    }
+    table tr{
+        background:#3B44F6;
+        color:#1B2430;
+        font-weight:bold;
+    }
+    table .total{
+        color:white;
+    }
+    table .func{
+        background:#d2d2d2;
+    }
+</style>
+
+
+<div class="wrapper">
+    <div class="index-chart">
+        <h1>Index Chart</h1>
+        <canvas id="indexChart"></canvas>
+    </div>
+    <div class="index-chart">
+        <form action="" method="get">
+            <input type="text" name="dt" placeholder="Enter  year">
+             <label>Enter aimed index</label>
+            <input type="text" name="aim">
+             <input type="submit" value="Submit">
+        </form>
+        <h1>Indexes based on month of {{dt}}</h1>
+         <h2>Aimed index is : {{aim}}</h2>
+        <canvas id="mixed"></canvas>
+    </div>
+    <div class="index-chart">
+        <h1>Department Project Count Chart</h1>
+        <canvas id="deptChart"></canvas>
+    </div>
+    <div style="display:none;" class="index-chart">
+        <form class="form" action="" method="get">
+            <label>Enter date</label>
+            <input type="text" name="date">
+            <input type="submit" value="submit">
+        </form>
+        <canvas id="dateChart"></canvas>
+    </div>
+    <div class="index-chart">
+    <form class="form" action="" method="get">
+            <label>Enter year</label>
+            <input type="text" name="state">
+            <label>Enter second year</label>
+            <input type="text" name="state-dup">
+            <input type="submit" value="submit">
+        </form>
+        <canvas id="stateChart"></canvas>
+    </div>
+    <div class="pivot">
+        <form action="" method="get">
+            <input type="text" name="pivot" placeholder="Enter PLANNED Year">
+            <input type="submit" value="Submit">
+        </form>
+        <h2>Year {{pivot}} CTO Digi Index - Weighted Points according to digitalization metrics.</h2>
+        <table>
+            <tr>
+                <th>Function</th>
+            {% for op in op %}
+                <th>{{op.name}}</th>
+            {% endfor %}
+                <th>Total</th>
+            </tr>
+            <tbody>
+            <tr class="func">
+                <td>Engineering</td>
+                <td>{{eng_input}}</td>
+                <td>{{eng_cc}}</td>
+                <td>{{eng_meas}}</td>
+                <td>{{eng_dec}}</td>
+                <td>{{eng_an}}</td>
+                <td>{{eng_rep}}</td>
+                <td>{{eng_oth}}</td>
+                <td>{{eng_total}}</td>
+            </tr>
+            <tr class="func">
+                <td>Production</td>
+                <td>{{pro_input}}</td>
+                <td>{{pro_cc}}</td>
+                <td>{{pro_meas}}</td>
+                <td>{{pro_dec}}</td>
+                <td>{{pro_an}}</td>
+                <td>{{pro_rep}}</td>
+                <td>{{pro_oth}}</td>
+                <td>{{pro_total}}</td>
+            </tr>
+            <tr class="func">
+                <td>Technology</td>
+                <td>{{tech_input}}</td>
+                <td>{{tech_cc}}</td>
+                <td>{{tech_meas}}</td>
+                <td>{{tech_dec}}</td>
+                <td>{{tech_an}}</td>
+                <td>{{tech_rep}}</td>
+                <td>{{tech_oth}}</td>
+                <td>{{tech_total}}</td>
+            </tr>
+            <tr class="func">
+                <td>Vice CTO</td>
+                <td>{{cto_input}}</td>
+                <td>{{cto_cc}}</td>
+                <td>{{cto_meas}}</td>
+                <td>{{cto_dec}}</td>
+                <td>{{cto_an}}</td>
+                <td>{{cto_rep}}</td>
+                <td>{{cto_oth}}</td>
+                <td>{{cto_total}}</td>
+            </tr>
+            <tr class="total">
+                <td>Grand Total</td>
+                <td>{{inp_total}}</td>
+                <td>{{cc_total}}</td>
+                <td>{{meas_total}}</td>
+                <td>{{dec_total}}</td>
+                <td>{{an_total}}</td>
+                <td>{{rep_total}}</td>
+                <td>{{other_total}}</td>
+                <td>{{grand_total}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+const ctx = document.getElementById('indexChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [{% for p in project %} 'Digi-{{p.id}}', {% endfor %}],
+        datasets: [{
+            label: 'Index of project',
+            data: [{% for p in project %} {{p.index}} ,{% endfor %}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+const dept = document.getElementById('deptChart').getContext('2d');
+const deptChart = new Chart(dept, {
+    type: 'bar',
+    data: {
+        labels: [{% for key,value in dept.items %} '{{key}}', {% endfor %}],
+        datasets: [{
+            label: 'Department of projects',
+            data: [{% for key,value in dept.items %} {{value}} ,{% endfor %}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: false
+            }
+        }
+    }
+});
+const date = document.getElementById('dateChart').getContext('2d');
+const dateChart = new Chart(date, {
+    type: 'bar',
+    data: {
+        labels: [{% for i in date %} '{{i.year}}', {% endfor %}],
+        datasets: [{
+            label: 'Indexes based on project year',
+            data: [{% for i in date %} '{{i.index}}' ,{% endfor %}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+const state = document.getElementById('stateChart').getContext('2d');
+const stateChart = new Chart(state, {
+    type: 'bar',
+    data: {
+        labels: [{% for p in list %} '{{p}}', {% endfor %}],
+        datasets: [{
+            label: 'TOTAL Indexes based on project year',
+            data: [ '{{count}}','{{ct}}'],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+const mix = document.getElementById('mixed').getContext('2d');
+var mixedChart = new Chart(mix, {
+  type: 'bar',
+  data: {
+    datasets: [{
+    backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth:1,
+          label: 'Index per month of year(Cumulatif)',
+          data: [{% for c in cumsum %} '{{c}}',{% endfor %}]
+        }, {
+          label: 'Aimed index',
+          data: [{% for date in date %} '{{aim}}','{{aim}}','{{aim}}','{{aim}}', {% endfor %}],
+          backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth:1,
+          // Changes this dataset to become a line
+          type: 'line'
+        }],
+    labels: [{% for date in date %} '{{date.date}}',{% endfor %}]
+
+  },
+  options: {
+        scales: {
+            y: {
+                beginAtZero: false
+            }
+        }
+    }
+});
+</script>
+{% endblock content %}

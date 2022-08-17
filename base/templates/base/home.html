@@ -1,0 +1,313 @@
+{%  include 'main.html' %}
+{% block content %}
+<!-- CSS only -->
+
+<style>
+   @import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500&display=swap');
+    *{
+        padding: 0;
+        margin: 0;
+        text-decoration: none;
+        font-family:'Saira Condensed', sans-serif;
+        font-size:13px;
+        box-sizing:border-box;
+    }
+    body{
+    background:white;
+    width:100vw;
+    min-height:100vh;
+    height:auto;
+    }
+    a{
+        color:black;
+        font-weight: 1000;
+    }
+
+    #projects {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 80%;
+        overflow-x:auto;
+        flex:5;
+    }
+#projects td, #customers th {
+  padding: 5px;
+
+}
+
+#projects tr{background-color: #f2f2f2;}
+
+#projects tr:hover {background-color: #ddd;}
+#projects th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #242F9B;
+  color: #F2F2F2;
+}
+
+.delete{
+    color:#D7263D;
+}
+.edit{
+    color:#383838;
+}
+.container{
+    width:100%;
+    text-align:center;
+    display:flex;
+    margin-top:10px;
+}
+.topbar{
+margin-top:20px;
+}
+    .btn{
+        border:none;
+        background:#1363DF;
+        cursor:pointer;
+    }
+    a .btn  {
+        color:white;
+    }
+    .btn:hover{
+       background:#003865;
+    }
+    .form-filter{
+        border:none;
+        background:#1363DF;
+        cursor:pointer;
+        width:100px;
+        height:30px;
+        color:white;
+    }
+    .clear a{
+    color:white;
+    width:100px;
+    height:30px;
+    }
+    .form-filter:hover{
+        background:#003865;
+    }
+    .clear:hover{
+    background:#003865;
+    }
+    .clear{
+       border:none;
+        background:#1363DF;
+        cursor:pointer;
+        width:100px;
+        height:30px;
+    }
+    .excel{
+     border:none;
+        background:#06A77D;
+        cursor:pointer;
+        width:100px;
+        height:30px;
+        color:white;
+    }
+    .excel a{
+        color:white;
+    }
+    .excel:hover{
+    background:#08605F;
+    }
+    .header{
+    display:grid;
+    grid-template-columns:auto auto;
+    background:#00FFAB;
+    min-height:50px;
+    height:auto;
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    }
+    .header .btn{
+        width:150px;
+        position:absolute;
+        height:50px;
+         top: 0px;
+        right: 0px;
+    }
+    .header .cikis{
+        width:30px;
+        position: absolute;
+        bottom:0px;
+        left: 0px;
+    }
+    table tr td #eye{
+        float:left;
+        position:relative;
+        left:17px;
+    }
+    #eye:hover .tooltiptext{
+    visibility:visible;
+    }
+    #eye .tooltiptext{
+     visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+    }
+    @media only screen and (max-width:1450px){
+    .topbar{
+        display:grid;
+        grid-template-columns:auto auto auto auto;
+        align-items:center;
+        place-items:center;
+    }
+    .topbar select,input[type=text]{
+        width:100%;
+    }
+    .topbar .clear,.form-filter{
+        margin-top:10px;
+        text-align:center;
+    }
+    .excel{
+        margin-top:10px;
+    }
+    #projects th{
+        display:none;
+    }
+    #projects tr,td{
+        display:grid;
+        grid-template-columns:auto auto;
+        width:50vw;
+    }
+    #projects tr{
+        margin-bottom:15px;
+    }
+
+    }
+</style>
+<div class="header">
+    {% if request.user.is_authenticated %}
+    {% if request.user.is_superuser %}
+    <h2>Welcome <a style="border-bottom:1px solid black;" href="{% url 'superuser' %}">{{request.user.first_name}}</a></h2>
+    <a  href="{% url 'create-project'%}"><button class="btn"><i class="fa fa-plus" style="font-size:18px;"></i>  Create Project</button></a>
+    <a class="cikis" href="{% url 'logout' %}">Logout</a>
+    {% else %}
+    <h2>Welcome {{request.user.first_name}}</h2>
+    <a  href="{% url 'create-project'%}"><button class="btn"><i class="fa fa-plus" style="font-size:18px;"></i>  Create Project</button></a>
+    <a class="cikis" href="{% url 'logout' %}">Logout</a>
+    {% endif %}
+    {% endif %}
+</div>
+{% for i in dep %}
+<p>{{i}}</p>
+{% endfor %}
+{% if request.user.is_authenticated %}
+{% if request.user.is_superuser %}
+<form class="topbar" action="" method="get">
+    {{projectFilter.form}}
+    <button class="form-filter" type="submit">Filter</button>
+    <button class="clear"><a  href="{% url 'home' %}">Clear Filter</a></button>
+    <button class="excel"><a href="{% url 'export-excel' %}">Export as Excel</a></button>
+</form>
+{% else %}
+<form class="topbar" action="" method="get">
+    {{defaultProject.form}}
+    <button class="form-filter" type="submit">Filter</button>
+     <a  href="{% url 'home' %}"><button class="clear">Clear Filter</button></a>
+</form>
+{% endif %}
+<div class="container">
+<table id="projects">
+    <tr>
+         <th>Created By</th>
+                <th>State</th>
+                <th>Function</th>
+                <th>Project No</th>
+                <th>Department</th>
+                <th>Project Name</th>
+                <th>Project Detail</th>
+                <th>Responsible</th>
+                <th>CS or SmartMNF</th>
+                <th>Operation</th>
+                <th>Latest Status</th>
+                <th>Completion Date</th>
+                <th>Planned Year</th>
+                <th>Fraction</th>
+                <th>Customer</th>
+                <th>Index</th>
+                <th>Conn</th>
+                <th>Maturity</th>
+    </tr>
+    {% for project in projectFilter.qs %}
+    <tr>
+        {% if request.user.is_superuser %}
+            <tr>
+                <td>{{project.host.first_name}}</td>
+                        {% if project.state.name == "Not Started" %}
+                            <td style="background-color:#A5BECC;"><p class="renk">{{project.state}}</p></td>
+                        {% elif project.state.name == "Cancelled"%}
+                            <td style="background-color:#D7263D;"><p class="renk">{{project.state}}</p></td>
+                        {% elif project.state.name == "Completed" %}
+                            <td style="background-color:#00C49A;"><p class="renk">{{project.state}}</p></td>
+                        {% else %}
+                            <td>{{project.state}}</td>
+                        {% endif %}
+                <td>{{project.function}}</td>
+                <td>Digi-{{project.id}}</td>
+                <td>{{project.dept}}</td>
+                <td>{{project.name}}</td>
+                <td>{{project.details}}</td>
+                <td>{{project.dept.resp.first_name}}</td>
+                <td>{{project.CS_or_SmartMNF}}</td>
+                <td>{{project.operation}}</td>
+                <td><a href="{% url 'old' project.id %}"><i id="eye" class="fa fa-eye" style="font-size:16px"><span class="tooltiptext">Show All Statuses</span></i></a>{{project.latestStatus}}</td>
+                <td>{{project.date}}</td>
+                <td>{{project.year}}</td>
+                <td>{{project.fraction}}</td>
+                <td>{{project.customer}}</td>
+                <td>{{project.index}}</td>
+                <td>{{project.conn}}</td>
+                <td>{{project.digital}}</td>
+                <td><a class="edit" href="{% url 'update-project' project.id %}"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
+                <td><a class="delete" href="{% url 'delete-project' project.id %}"><i class='fa fa-trash' style='font-size:36px;color: red'></i></a></td>
+    </tr>
+    {% elif request.user.first_name == project.dept.resp.first_name %}
+            <td>{{project.host.first_name}}</td>
+                        {% if project.state.name == "Not Started" %}
+                            <td style="background-color:#4F6367;"><p class="renk">{{project.state}}</p></td>
+                        {% elif project.state.name == "Cancelled"%}
+                            <td style="background-color:#D7263D;"><p class="renk">{{project.state}}</p></td>
+                        {% elif project.state.name == "Completed" %}
+                            <td style="background-color:#00C49A;"><p class="renk">{{project.state}}</p></td>
+                        {% else %}
+                            <td>{{project.state}}</td>
+                        {% endif %}
+                <td>{{project.function}}</td>
+                <td>Digi-{{project.id}}</td>
+                <td>{{project.dept}}</td>
+                <td>{{project.name}}</td>
+                <td>{{project.details}}</td>
+                <td>{{project.dept.resp.first_name}}</td>
+                <td>{{project.CS_or_SmartMNF}}</td>
+                <td>{{project.operation}}</td>
+                <td><a href="{% url 'old' project.id %}"><i id="eye" class="fa fa-eye" style="font-size:16px"><span class="tooltiptext">Show All Statuses</span></i></a>{{project.latestStatus}}</td>
+                <td>{{project.date}}</td>
+                <td>{{project.year}}</td>
+                <td>{{project.fraction}}</td>
+                <td>{{project.customer}}</td>
+                <td>{{project.index}}</td>
+                <td>{{project.conn}}</td>
+                <td>{{project.digital}}</td>
+                <td><a class="edit" href="{% url 'update-project' project.id %}"><i class="fa fa-edit" style="font-size:36px"></i></a></td>
+    {% endif %}
+    {% endfor %}
+</table>
+
+</div>
+
+{% else %}
+<p style="text-align:center;font-size: 56px;">You must <a class="hover" style="font-size:56px;border-bottom:solid 2px black;" href="{% url 'login' %}">log in.</a></p>
+
+{% endif %}
+{% endblock content %}
+

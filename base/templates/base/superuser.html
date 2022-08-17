@@ -1,0 +1,249 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500&display=swap');
+    *{
+        margin:0;
+        padding:0;
+        font-family: 'Lato', sans-serif;
+        text-decoration:none;
+        font-size:15px;
+    }
+   .create-section table a:hover{
+    border-bottom:solid 3px #EF5B0C;
+    }
+    body{
+        width:100%;
+        height:100%;
+        font-size:16px;
+    }
+    .wrapper{
+      display:flex;
+      min-height:1009px;
+      height:auto;
+      font-size:16px;
+    }
+    .filtre{
+        margin-top:5px;
+        margin-bottom:5px;
+    }
+    .create-section{
+        width:100%;
+    }
+    .create-section .form-btn a{
+    color:white;
+    width:100%;
+    }
+    .create-section .form-btn{
+        border:none;
+        background:#1363DF;
+        cursor:pointer;
+        width:120px;
+        color:white;
+        font-size:20px;
+    }
+    .form-btn:hover{
+      background:#1F4690;
+    }
+    .wrapper .side{
+    flex:0.3;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-evenly;
+    background:#47B5FF;
+    color:white;
+    min-height:50px;
+    }
+    .wrapper .side{
+        text-align:center;
+    }
+    .side a{
+        color:White;
+        border-bottom:2px solid #d2d2d2;
+    }
+    .side .list{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    }
+    .side .list button{
+        background:#47B5FF;
+        border-bottom:2px solid #d2d2d2;
+        border-top:none;
+        border-right:none;
+        border-left:none;
+        cursor:pointer;
+        color:white;
+        width:120px;
+    }
+    .side .list button:hover{
+        color:#06283D;
+        border-bottom:2px solid #06283D;
+    }
+    .side .list a:hover{
+        color:#06283D;
+        border-bottom:2px solid #06283D;
+    }
+    .home{
+        flex:3;
+    }
+    .userlist{
+        border-collapse:collapse;
+        width:100%;
+        text-align:center;
+    }
+    .userlist td, th {
+    padding: 5px;
+    font-size:18px;
+    }
+
+    .userlist tr{
+    background-color: #f2f2f2;
+    }
+    .userlist tr a{
+        color:#6E85B7;
+        font-size:24px;
+    }
+.userlist tr:hover {background-color: #ddd;}
+.userlist th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #3AB0FF;
+  color: #F2F2F2;
+}
+.line{
+width:100%;
+background:#3AB0FF;
+height:30px;
+color:white;
+font-size:larger;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+.add-section{
+   display:grid;
+   grid-template-columns:auto auto;
+   gap:15px;
+   place-items:center;
+   background-color: #f2f2f2;
+}
+.add-section a{
+    color:black;
+    font-size:20px;
+}
+.add-section a:hover{
+  color:#242F9B;
+}
+.liste{
+display:flex;
+flex-direction:column;
+text-align:center;
+gap:20px;
+}
+@media only screen and (max-width:700px){
+    .wrapper{
+        display:flex;
+        flex-direction:column;
+    }
+    .wrapper .side{
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    }
+    .liste{
+        display:grid;
+        grid-template-columns:auto auto auto;
+        gap:15px;
+    }
+    .create-section form{
+    display:grid;
+    grid-template-columns:auto;
+    }
+    .create-section form .form-btn{
+    width:100%;
+    margin:10px 0;
+    }
+    .create-section form .form-btn a{
+        font-size:24px;
+    }
+}
+</style>
+<div class="wrapper">
+    <div class="side">
+        <h1>Welcome {{request.user.first_name}}</h1>
+        <div class="list">
+            <div class="liste">
+                <a href="{% url 'home' %}">Home</a>
+                {% if request.user.is_superuser %}
+                <a href="{% url 'stat' %}">Stats</a>
+                <a href="{% url 'export-excel' %}">Export Excel</a>
+                <a href="{% url 'register' %}">Register  user</a>
+                <a class="cikis" href="{% url 'logout' %}">Logout</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="home">
+    {% if request.user.is_superuser %}
+        <div class="create-section">
+            <h2>Update user and user's department</h2>
+            <form class="filtre"  action="" method="get">
+                {{respFilter.form}}
+                <button class="form-btn" type="submit">Filter</button>
+                <button class="form-btn"><a  href="{% url 'superuser' %}">Clear Filter</a></button>
+            </form>
+            <div>
+                <table class="userlist">
+                    <tr>
+                        <th>Username</th>
+                        <th>Department Name</th>
+                    </tr>
+                {% for dept in respFilter.qs %}
+                    <tr>
+                        <td>{{dept.resp.first_name}}</td>
+                        <td><a href="{% url 'update-user' dept.id %}">{{dept.name}}</a></td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+        {% endif %}
+            {% if request.user.is_superuser %}
+        <div class="line">Manipulate existing columns</div>
+            <div class="add-section">
+            <a href="{% url 'add-column' %}"> Add function</a>
+            <a href="{% url 'add-responsible' %}">Add a department  for new user</a>
+            <a href="{% url 'add-state' %}">Add a new state</a>
+            <a href="{% url 'add-department' %}">add department</a>
+            <a href="{% url 'add-operation' %}">Add a operation</a>
+            <a href="{% url 'add-fraction' %}">Add a Fraction</a>
+            <a href="{% url 'add-customer' %}">Add a Customer</a>
+            <a href="{% url 'add-completion' %}">Add a Completion Date</a>
+            <a href="{% url 'add-year' %}">Add a Planned Year</a>
+            <a href="{% url 'add-mnf' %}">Add a data to cs or smart mnf type</a>
+            </div>
+            <table class="userlist">
+                <tr>
+                    <th>Item A</th>
+                    <th>Item B</th>
+                    <th>Item C</th>
+                    <th>Item D</th>
+                    <th>Item E</th>
+                </tr>
+                <tr>
+                    {% for w in w %}
+                    <td><a href="{% url 'update-weight' w.id %}">{{w.weight}}</a></td>
+                    {% endfor %}
+                </tr>
+            </table>
+            {% endif %}
+        </div>
+
+        </div>
+
+{% endblock content %}

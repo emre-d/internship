@@ -1,0 +1,110 @@
+<style>
+    *{
+        text-decoration: none;
+        font-size:22px;
+    }
+    a{
+        color:black;
+    }
+    .main{
+       display:flex;
+       align-items:center;
+    }
+    .red{
+        height:88vh;
+        width:100vw;
+    }
+   input[type=text],input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+input[type=submit] {
+  width: 100%;
+  background-color: #003865;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.log{
+  width: 100%;
+  color: white;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform:capitalize;
+}
+.log:hover{
+    transform:scale(1.05);
+}
+.sign{
+ width: 100%;
+  background-color: #003865;
+  color: white;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.form-control{
+    width: 100%;
+  padding: 12px 18px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+form{
+    margin-right:35px;
+    text-align:center;
+}
+@media only screen and (max-width:700px;)
+.red .txt{
+    display:none !important;
+}
+</style>
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+{% if page == 'login' %}
+<div class="main">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="giris">
+            <label>Username: </label>
+            <input  type="text" name="username" placeholder="Enter username:">
+            <label>Password: </label>
+            <input type="password" name="password" placeholder="Enter password:">
+            <input id="btn-login" type="submit" value="Login" >
+        </div>
+        <p style="text-transform:capitalize;">havent signed up yet ?</p>
+    <a class="sign" href="{% url 'register' %}">Sign Up</a>
+    </form>
+</div>
+{% else %}
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Register" >
+    </form>
+
+    <p style="text-transform:capitalize;">already signed up yet ?</p>
+    <a class="log" href="{% url 'login' %}">log in</a>
+</div>
+{% endif %}
+
+{% endblock content %}

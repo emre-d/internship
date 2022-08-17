@@ -1,0 +1,50 @@
+<style>
+    *{
+        text-align: center;
+        text-decoration: none;
+        background-color: #1F4690;
+        font-size: 24px;
+        background:white;
+    }
+    a{
+        color:black;
+    }
+    a:hover{
+        border-bottom:3px solid black;
+    }
+    p{
+      text-transform:uppercase;
+      display:inline-block;
+    }
+    .obj{
+        margin-left:15px;
+        border-bottom:solid 5px #764AF1;
+    }
+    input[type=submit] {
+  width: 100%;
+  background-color: #764AF1;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+ input[type=submit]:hover{
+    background:#9772FB;
+ }
+
+</style>
+
+
+
+{% block content %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <p>Are you sure you want to delete<p class="obj">Digi-{{obj.id}}?</p>
+    <input class="onay" type="submit" value="Confirm">
+    <a class="geri" href="{{request.META.HTTP_REFERER}}">Go back</a>
+</form>
+
+{% endblock content %}

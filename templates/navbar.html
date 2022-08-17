@@ -1,0 +1,79 @@
+<style>
+    *{
+        margin:0;
+        padding:0;
+    }
+        .flex{
+        font-size:24px;
+        position:relative;
+        display:flex;
+        flex-direction:column;
+        justify-content:space-evenly;
+        background:#00FFAB;
+        }
+        .flex .out{
+            text-align:center;
+            font-size:24px;
+        }
+        .btn{
+            position:absolute;
+             top: 0px;
+            right:0px;
+            height:50px;
+            width:150px;
+        }
+        .btn{
+        border:none;
+        background:#1363DF;
+        cursor:pointer;
+    }
+    .btn a {
+        color:white;
+    }
+    .btn:hover{
+       background:#003865;
+    }
+        .cikis{
+        width:100%;
+        color:#0A3CAB;
+        font-size:25px;
+        position:relative;
+
+        }
+    .cikis:hover{
+        border-bottom:4px solid #0A3CAB;
+    }
+    a{
+    text-decoration:none;
+    }
+    .digi{
+     background:#00FFAB;
+     text-align:center;
+     color:black;
+     font-size:26px;
+     }
+     @media only screen and (max-width:400px){
+     .btn{
+        display:none;
+     }
+     }
+</style>
+<div class="flex">
+    {% if request.user.is_superuser %}
+    <h1 style="width:300px;color:black;text-align: left;">Welcome <a href="{% url 'superuser' %}">{{request.user.first_name}}</a></h1>
+    {% if request.user.is_authenticated %}
+     <button class="btn"><a  href="{% url 'create-project'%}"><i class="fa fa-plus" style="font-size:18px;"></i>  Create Project</a></button>
+    {% endif %}
+    {% else %}
+     <h1 style="width:300px;color:black;text-align: left;">Welcome {{request.user.first_name}}</h1>
+     {% if request.user.is_authenticated %}
+     <button class="btn"><a  href="{% url 'create-project'%}"><i class="fa fa-plus" style="font-size:18px;"></i>  Create Project</a></button>
+    {% endif %}
+    {% endif %}
+{% if request.user.is_authenticated %}
+
+    <h1 class="digi"><a class="out" href="/">DigiIndex</a></h1>
+
+
+{% endif %}
+</div>
