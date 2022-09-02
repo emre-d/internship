@@ -1,3 +1,3 @@
 # internship
 Summer Internship Project
-Deleted database file because of privacy of company
+Deleted database file because of privacy of company.
